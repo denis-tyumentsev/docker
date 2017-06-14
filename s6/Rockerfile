@@ -1,0 +1,20 @@
+FROM centos:latest
+
+LABEL description="S6 supervisor"
+
+# INSTALL S6
+MOUNT /home/docker/build/s6/src/s6-overlay/v{{ .version }}/s6-overlay-amd64.tar.gz:/tmp/s6-overlay-amd64.tar.gz
+
+ATTACH bash
+
+RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C / --exclude="./bin" --exclude="./sbin" \
+  && tar xzf /tmp/s6-overlay-amd64.tar.gz -C /usr ./bin ./sbin \
+  && rm -rf /etc/localtime \
+  && ln -s /usr/share/zoneinfo/Europe/Moscow /etc/localtime
+
+ENTRYPOINT ["/init"]
+
+TAG s6:{{ .version }}
+
+TAG s6:latest
+

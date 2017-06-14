@@ -1,0 +1,76 @@
+FROM centos:s6.git.ruby-2.0.0-p598
+
+LABEL description="Erouter web server"
+
+# isntall Oracle dev + python dependencies 
+COPY config/yum.repos.d/ /etc/yum.repos.d/
+
+RUN yum install -y \
+  gcc-c++ \
+  mysql-devel \
+  libxslt-devel \ 
+  libxml2-devel \
+  oracle-instantclient* \
+  python-devel \
+  haproxy
+
+ENV ORACLE_HOME /usr/lib/oracle/12.1/client64
+ENV PATH $PATH:$ORACLE_HOME/bin
+ENV LD_LIBRARY_PATH $ORACLE_HOME/lib
+ENV NLS_LANG=American_America.UTF8
+
+# install pip
+#RUN curl "https://bootstrap.pypa.io/get-pip.py" -o "/tmp/get-pip.py"
+COPY ../../shared/pip_install/get-pip.py /tmp/
+RUN python /tmp/get-pip.py
+
+RUN pip install --upgrade pip \
+  && pip install \
+    MySQL-python \
+    cx_Oracle \ 
+    python-daemon \ 
+    python-dateutil \ 
+    redis
+
+# install erouter
+RUN adduser erouter \
+  && mkdir -p /home/erouter/erouter \
+  && mkdir /home/erouter/erouter-admin \
+  && mkdir /home/erouter/erouter-transfer
+
+WORKDIR /home/erouter
+
+MOUNT ../../secret/id_rsa_docker:/root/.ssh/id_rsa
+RUN echo -e "Host gitlab.eurochem.ru\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+
+RUN cd erouter \
+  && git clone git@gitlab.eurochem.ru:services-org/erouter.git . \
+  && bundle install
+
+RUN cd erouter-admin \
+  && git clone git@gitlab.eurochem.ru:services-org/erouter-admin.git . \
+  && bundle install
+
+ADD config/erouter/ /home/erouter/erouter/config/
+ADD config/erouter-admin/ /home/erouter/erouter-admin/config/
+
+RUN chown erouter:erouter -R /home/erouter/erouter* \
+  && chmod g+w,g+x,o+x -R /home/erouter/erouter*
+
+RUN chmod 0666 -R /home/erouter/erouter/tmp \
+  && mkdir -p /home/erouter/erouter-admin/tmp/pids \
+  && chmod 0666 -R /home/erouter/erouter-admin/tmp/pids \
+  && chmod 0666 -R /home/erouter/erouter-admin/log
+
+# setup haproxy
+RUN mkdir -p /var/empty/haproxy \
+  && mkdir /var/log/haproxy
+
+ADD config/haproxy/ /etc/haproxy/
+ADD config/services.d/ /etc/services.d/
+
+EXPOSE 80 8081 8082
+
+TAG erouter:{{ .version }}
+TAG erouter:latest
+

@@ -1,0 +1,45 @@
+admin:
+  # Запись здесь исключительно во целях документирования.
+  # Любой, желающий оторвать админку от локалхоста,
+  # должен не только её запустить и здесь поправить,.
+  # но ещё и в табличке systems базы данных поправить dsn у системы e-router
+  type: http
+  location: 127.0.0.1:8082
+
+core:
+  location: 0.0.0.0:9081
+
+backup:
+  location: 0.0.0.0:9082
+  type: core
+
+debug:
+  location: 0.0.0.0:9083
+  type: core
+
+
+oracle:
+  type: veiled
+  location: 127.0.0.1:8091
+
+mysql:
+  type: veiled
+  location: 127.0.0.1:8092
+
+# diadoc:
+#   type: veiled
+#   location: 127.0.0.1:8093
+
+#soap:
+#  type: http
+#  location: 127.0.0.1:8082
+#
+# as2:
+#   system_id: erouter
+#   trust_dir: cert/roots
+#   cert_dir: cert
+#.
+# ssl:
+#   certificate: cert/erouter.crt
+#   key: cert/erouter.key
+

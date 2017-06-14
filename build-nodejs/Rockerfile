@@ -1,0 +1,19 @@
+FROM centos:latest
+
+LABEL description="Base image with nodejs, git and s6-overlay supervisor"
+
+COPY ../../shared/s6-overlay/v1.18.1.5/s6-overlay-amd64.tar.gz /tmp/
+
+RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C / --exclude="./bin" --exclude="./sbin" \
+  && tar xzf /tmp/s6-overlay-amd64.tar.gz -C /usr ./bin ./sbin \
+  && rm -rf /etc/localtime \
+  && ln -s /usr/share/zoneinfo/Europe/Moscow /etc/localtime
+
+COPY config/yum.repos.d/nodejs.repo /etc/yum.repos.d/nodejs.repo
+
+RUN yum install -y nodejs git
+
+ENTRYPOINT ["/init"]
+
+TAG centos:s6.git.nodejs
+

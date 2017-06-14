@@ -1,0 +1,6 @@
+#!/usr/bin/with-contenv sh
+
+LOG_FILE=/home/erouter/erouter/tmp/veiled_mysql.log
+cd /home/erouter/erouter \
+&& DEBUG=1 /home/erouter/erouter/veiled_controller run mysql >>$LOG_FILE 2>&1
+

@@ -1,0 +1,20 @@
+FROM s6:latest
+
+LABEL description="Redis server"
+
+COPY config/yum.repos.d/ /etc/yum.repos.d/
+
+RUN mkdir /etc/redis \
+  && yum install redis -y
+
+COPY config/redis/ /etc/redis/
+
+ATTACH ["/bin/bash"]
+
+EXPOSE 6379
+
+CMD ["redis-server", "/etc/redis/redis.conf"]
+
+TAG redis:{{ .version }}
+TAG redis:latest
+

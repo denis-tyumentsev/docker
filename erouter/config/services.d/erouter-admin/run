@@ -1,0 +1,11 @@
+#!/usr/bin/with-contenv sh
+
+LOG_FILE=/home/erouter/erouter-admin/log/thin.log
+
+RACK_ENV=`readlink config/current_env || echo "development"`
+USER=root
+
+cd /home/erouter/erouter-admin \
+&& bundle exec thin -p 8082 -u $USER -g $USER -R config.ru -e $RACK_ENV start >>$LOG_FILE 2>&1
+
+

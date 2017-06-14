@@ -1,0 +1,5 @@
+database: erouter_docker
+encoding: utf8
+host: localhost
+username: erouter
+password: password

@@ -1,0 +1,4 @@
+#!/usr/bin/with-contenv sh
+
+LOG_FILE=/var/log/haproxy/haproxy.log
+/usr/sbin/haproxy -f /etc/haproxy/haproxy.cfg -d >>$LOG_FILE 2>&1

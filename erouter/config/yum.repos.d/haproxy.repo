@@ -1,0 +1,6 @@
+[haproxy]
+name=Eurochem HaProxy Repository
+baseurl=http://uds-puppet.moscow.eurochem.ru/haproxy/CentOS/7/x86_64
+enabled=1
+gpgcheck=0
+

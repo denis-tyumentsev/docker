@@ -1,0 +1,13 @@
+version: '2'
+services:
+  erouter:
+    image: erouter:latest
+    container_name: erouter_app
+    ports:
+      - 8081:8081
+      - 8082:8082
+    volumes:
+      - /home/docker/run/erouter/erouter/:/home/erouter/erouter/tmp/
+      - /home/docker/run/erouter/erouter-admin/:/home/erouter/erouter-admin/log/
+      - /home/docker/run/erouter/haproxy/:/var/log/haproxy/
+

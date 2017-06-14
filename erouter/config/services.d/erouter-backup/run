@@ -1,0 +1,5 @@
+#!/usr/bin/with-contenv sh
+
+LOG_FILE=/home/erouter/erouter/tmp/e-router_backup.log
+cd /home/erouter/erouter \
+&& /home/erouter/erouter/e-router start -t -- backup >>$LOG_FILE 2>&1

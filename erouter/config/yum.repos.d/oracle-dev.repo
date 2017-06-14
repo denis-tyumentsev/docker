@@ -1,0 +1,6 @@
+[eurochem-oracle]
+name=Eurochem Oracle Contrib repository
+baseurl=http://uds-puppet.moscow.eurochem.ru/oracle-contrib/CentOS/$releasever/$basearch
+enabled=1
+gpgcheck=0
+

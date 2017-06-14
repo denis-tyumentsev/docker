@@ -1,0 +1,9 @@
+defaults: &defaults
+  adapter: mysql2
+  database: erouter
+  encoding: utf8
+  host: localhost
+  user: erouter_docker
+  password: password
+development: *defaults
+production: *defaults
